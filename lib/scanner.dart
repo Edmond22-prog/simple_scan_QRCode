@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -58,13 +59,15 @@ class _QRScanState extends State<QRScan> {
             maxLines: 3,
           ),
           onPressed: (){
-            Navigator.pushReplacementNamed(
-              context,
-              '/registration',
-              arguments: {
-                'information' : barcode
-              }
-            );
+            if(barcode != null){
+              Navigator.pushReplacementNamed(
+                  context,
+                  '/registration',
+                  arguments: {
+                    'information' : barcode!.code
+                  }
+              );
+            }
           },
         )
     );
@@ -86,9 +89,9 @@ class _QRScanState extends State<QRScan> {
 
   void onQRViewCreated(QRViewController controller) {
     this.controller = controller;
-    controller.scannedDataStream.listen((event) {
+    controller.scannedDataStream.listen((scanData) {
       setState(() {
-        barcode = event;
+        barcode = scanData;
       });
     });
   }
